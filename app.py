@@ -250,7 +250,7 @@ with st.sidebar:
             (merged_df["season_name"] == selected_season) &
             (merged_df.team_name == selected_team)
         ]
-
+        
 # --- Main Page ---
 st.header(f"{selected_team.replace('_', ' ')} {selected_season} {viz_type} Heatmap")
 
@@ -275,22 +275,14 @@ with col[0]:
     else:
         st.metric(label="Total Shots", value=total_events)
 
-# Column 1: Heatmap Visualization
+# Column 1: Heatmap Visualization (Removed extra button)
 with col[1]:
     st.header(f"{selected_team.replace('_', ' ')} {selected_season} {viz_type} Heatmap")
-    if st.button("Show Heatmap"):
-        if viz_type == "Goals":
-            fig = make_goals_heatmap(df_filtered, selected_team, selected_season)
-        else:
-            fig = make_heatmap(df_filtered, selected_team, selected_season)
-        st.pyplot(fig)
-    else:
-        st.info("Click the button to display the heatmap.")
+    st.info("Click the button above to display the heatmap.")
 
 # Column 2: Additional Insights
 with col[2]:
     st.markdown("### Additional Insights")
-    # For example, if you have a shot distance column, you can show average shot distance.
     if "shot_distance" in df_filtered.columns:
         avg_distance = df_filtered["shot_distance"].mean()
         st.metric(label="Avg. Shot Distance", value=f"{avg_distance:.1f}")
