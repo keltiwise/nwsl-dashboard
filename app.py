@@ -54,6 +54,18 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# Import all CSV files gathered from API
+games = pd.read_csv("games_ids_2024.csv")
+shots = pd.read_csv("shots_data_2024.csv")
+teams = pd.read_csv("team_ids_2024.csv")
+
+# Adding team_name to shots column to easily identify which team is shooting which will then 
+# lead to sorting data by name
+# Merge the 'shots' DataFrame with the 'teams' DataFrame based on 'team_id'
+merged_df = pd.merge(shots, teams[['team_id', 'team_name']], on='team_id', how='left')
+# Merge the shots dataframe with the games dataframe on the gameid and keep season name
+merged_df = pd.merge(merged_df, games[['game_id', 'season_name']], on = 'game_id', how = 'left')
+
 
 # Define the heatmap function for all shots
 def make_heatmap(shots_df, team_name, season_name, cmap="turbo", bw_adjust=0.3, levels=10,
