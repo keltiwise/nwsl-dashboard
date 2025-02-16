@@ -228,8 +228,8 @@ with st.sidebar:
     # Visualization type selection
     viz_type = st.selectbox('Select Visualization Type', ['All Shots', 'Goals'])
     
-    # Dropdown for season selection (sorted)
-    season_list = sorted(merged_df.season_name.unique())
+    # Dropdown for season selection (sorted and removing NaN values)
+    season_list = sorted([s for s in merged_df.season_name.unique() if pd.notna(s)])
     selected_season = st.selectbox('Select a season', season_list, index=len(season_list) - 1)
 
     # Filter teams based on season (Remove Bay FC if season is before 2024)
@@ -259,7 +259,6 @@ with st.sidebar:
             (merged_df.team_name == selected_team)
         ]
 
-        
 # --- Main Page ---
 st.header(f"{selected_team.replace('_', ' ')} {selected_season} {viz_type} Heatmap")
 
