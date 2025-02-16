@@ -261,7 +261,7 @@ if st.button("Show Heatmap"):
         fig = make_heatmap(df_filtered, selected_team, selected_season)
     st.pyplot(fig)
 
-    col = st.columns((1.5, 4.5, 2), gap='medium')
+col = st.columns((1.5, 4.5, 2), gap='medium')
 
 # Column 0: Summary Metrics
 with col[0]:
