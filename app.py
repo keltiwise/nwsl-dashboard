@@ -228,18 +228,21 @@ with st.sidebar:
     # Visualization type selection
     viz_type = st.selectbox('Select Visualization Type', ['All Shots', 'Goals'])
     
-    # Filter teams based on season (Remove Bay FC if season is before 2024)
-    if int(selected_season) < 2024:
-        team_list = list(merged_df[merged_df.team_name != "Bay FC"].team_name.unique())
-    else:
-        team_list = list(merged_df.team_name.unique())
-
-    # Dropdown for team selection
-    selected_team = st.selectbox('Select a team', team_list, index=len(team_list) - 1)
-    
-    # Dropdown for season selection (using season_name)
+    # Dropdown for season selection (sorted)
     season_list = sorted(merged_df.season_name.unique())
     selected_season = st.selectbox('Select a season', season_list, index=len(season_list) - 1)
+
+    # Filter teams based on season (Remove Bay FC if season is before 2024)
+    try:
+        if int(selected_season) < 2024:
+            team_list = list(merged_df[merged_df.team_name != "Bay FC"].team_name.unique())
+        else:
+            team_list = list(merged_df.team_name.unique())
+    except ValueError:
+        team_list = list(merged_df.team_name.unique())
+    
+    # Dropdown for team selection
+    selected_team = st.selectbox('Select a team', team_list, index=len(team_list) - 1)
     
     # Filter the DataFrame based on the selected team and season.
     # If "Goals" is selected, filter for rows where goal == 1 and own_goal != 1.
@@ -255,6 +258,7 @@ with st.sidebar:
             (merged_df["season_name"] == selected_season) &
             (merged_df.team_name == selected_team)
         ]
+
         
 # --- Main Page ---
 st.header(f"{selected_team.replace('_', ' ')} {selected_season} {viz_type} Heatmap")
