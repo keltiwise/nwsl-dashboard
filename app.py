@@ -262,12 +262,12 @@ with st.sidebar:
 # --- Main Page ---
 st.header(f"{selected_team.replace('_', ' ')} {selected_season} {viz_type} Heatmap")
 
-if st.button("Show Heatmap"):
-    if viz_type == "Goals":
-        fig = make_goals_heatmap(df_filtered, selected_team, selected_season)
-    else:
-        fig = make_heatmap(df_filtered, selected_team, selected_season)
-    st.pyplot(fig)
+# Automatically show heatmap without a button
+if viz_type == "Goals":
+    fig = make_goals_heatmap(df_filtered, selected_team, selected_season)
+else:
+    fig = make_heatmap(df_filtered, selected_team, selected_season)
+st.pyplot(fig)
 
 col = st.columns((1.5, 4.5, 2), gap='medium')
 
