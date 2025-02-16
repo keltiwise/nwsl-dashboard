@@ -228,8 +228,13 @@ with st.sidebar:
     # Visualization type selection
     viz_type = st.selectbox('Select Visualization Type', ['All Shots', 'Goals'])
     
+    # Filter teams based on season (Remove Bay FC if season is before 2024)
+    if int(selected_season) < 2024:
+        team_list = list(merged_df[merged_df.team_name != "Bay FC"].team_name.unique())
+    else:
+        team_list = list(merged_df.team_name.unique())
+
     # Dropdown for team selection
-    team_list = list(merged_df.team_name.unique())
     selected_team = st.selectbox('Select a team', team_list, index=len(team_list) - 1)
     
     # Dropdown for season selection (using season_name)
