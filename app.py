@@ -272,19 +272,34 @@ with st.sidebar:
     if selected_team == "No Teams Available":
         selected_team = "Unknown Team"
 
+# Define the relevant columns to keep
+columns_to_keep = [
+    "goal", "own_goal", "blocked", "distance_from_goal_yds",  # Shot results
+    "shot_xg", "shot_psxg",  # Expected goals metrics
+    "assist_through_ball", "assist_cross",  # Assist types
+    "head",  # Header or not
+    "game_minute", "period_id", "home_score", "away_score",  # Game context
+    "shot_location_x", "shot_location_y",  # Shot location
+    "blocked_x", "blocked_y",  # Blocked shot location
+    "team_name", "season_name", "shooter_player_id", "assist_player_id"  # Identifiers
+]
+
 # Filter the DataFrame based on the selected team and season
 if viz_type == "Goals":
     df_filtered = merged_df[
         (merged_df["goal"] == 1) &
         (merged_df["own_goal"] != 1) &
         (merged_df["season_name"] == selected_season) &
-        (merged_df.team_name == selected_team)
+        (merged_df["team_name"] == selected_team)
     ]
 else:  # "All Shots"
     df_filtered = merged_df[
         (merged_df["season_name"] == selected_season) &
-        (merged_df.team_name == selected_team)
+        (merged_df["team_name"] == selected_team)
     ]
+
+# Keep only the necessary columns if they exist in the dataset
+df_filtered = df_filtered[[col for col in columns_to_keep if col in df_filtered.columns]]
 
 
 # --- Main Page ---
