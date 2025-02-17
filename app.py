@@ -8,6 +8,7 @@ from matplotlib.patches import Rectangle, Arc
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+from pathlib import Path
 
 st.set_page_config(
     page_title="NWSL Dashboard",
