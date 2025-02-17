@@ -319,6 +319,8 @@ with col[0]:
 
     # Apply custom styling to the metric display
     st.markdown(f'<div class="metric-container">{metric_label}: {total_events}</div>', unsafe_allow_html=True)
+    
+logo_path = Path(f"Logos/{selected_team}.png")
 
 # Column 1: Heatmap Visualization (Removed extra button)
 with col[1]:
