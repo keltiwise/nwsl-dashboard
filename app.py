@@ -331,7 +331,7 @@ with col[1]:
     if logo_path.exists():
         st.markdown(
             f'<div style="display: flex; justify-content: center;">'
-            f'<img src="{logo_path}" width="150"></div>',
+            f'<img src="{logo_path}.png" width="150"></div>',
             unsafe_allow_html=True
         )
     else:
