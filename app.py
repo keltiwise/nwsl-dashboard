@@ -353,14 +353,14 @@ with col[1]:
     st.markdown("### Team Logo")
     
     # Ensure team name formatting for logo file path
-    safe_team_name = selected_team.replace("/", "_")  # Replace '/' with '_'
+    safe_team_name = selected_team.replace("/", "_")  # Replace ':' with '/'
     
     # Construct the path to the logo file
     logo_path = os.path.join("Logos", f"{safe_team_name}.png")
     
     # Check if the logo file exists
     if os.path.exists(logo_path):
-        st.image(logo_path, width=150)  # Adjust width for a smaller display
+        st.image(logo_path, width=200)  # Adjust width for a smaller display
     else:
         st.warning(f"Logo for {selected_team} not found.")
 
