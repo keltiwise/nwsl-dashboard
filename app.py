@@ -373,21 +373,23 @@ with col[0]:
     
 # Column 1: Heatmap Visualization (Removed extra button)
 with col[1]:
+    # Removed title for this column
     
-    # The team name as shown on the dashboard
-    team_display_name = selected_team  # e.g., "NJ/NY Gotham FC"
+    # Get the team name as it should appear on the dashboard (e.g., "NJ/NY Gotham FC")
+    team_display_name = selected_team  
     
-    # Replace '/' with ':' to match the file name in the Logos folder
+    # Replace '/' with ':' to match the corresponding file name in the Logos folder
     file_team_name = selected_team.replace("/", ":")
     
-    # Construct the path to the logo file
+    # Construct the file path for the team logo
     logo_path = os.path.join("Logos", f"{file_team_name}.png")
-
     
-    # Check if the logo file exists and display it
+    # Check if the logo file exists; if it does, display it
     if os.path.exists(logo_path):
-        st.image(logo_path, width = 400)  # Adjust width as needed
+        # Center the logo using HTML and CSS in markdown
+        st.markdown(f'<div style="display: flex; justify-content: center;"><img src="{logo_path}" width="400"></div>', unsafe_allow_html=True)
     else:
+        # If the logo is not found, display a warning message
         st.warning(f"Logo for {team_display_name} not found.")
 
 
