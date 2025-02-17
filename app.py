@@ -220,54 +220,56 @@ def make_goals_heatmap(goals_df, team_name, season_name, cmap="turbo", bw_adjust
     plt.text(50, 60, "Visualizing All Goals", fontsize=12, color='gray', ha='center')
     
     return fig
-
 # --- Streamlit Sidebar ---
 with st.sidebar:
     st.title('NWSL Dashboard')
-    
+
     # Visualization type selection
     viz_type = st.selectbox('Select Visualization Type', ['All Shots', 'Goals'])
-    
+
     # Dropdown for season selection (sorted and removing NaN values)
     season_list = sorted([s for s in merged_df.season_name.unique() if pd.notna(s)])
     selected_season = st.selectbox('Select a season', season_list, index=len(season_list) - 1)
 
-    if int(selected_season) < 2018:
-        team_list = list(merged_df.team_name.unique())
-    else:
-        team_list = [team for team in merged_df.team_name.unique() if team != "Boston Breakers"]
-    
+    # Filter teams based on season
+    team_list = list(merged_df.team_name.unique())
+
+    # Remove Boston Breakers if the season is 2018 or later
+    if int(selected_season) >= 2018:
+        team_list = [team for team in team_list if team != "Boston Breakers"]
+
+    # Remove Bay FC if the season is before 2024
     if int(selected_season) < 2024:
         team_list = [team for team in team_list if team != "Bay FC"]
 
-    # Completely remove Western New York Flash from selection
+    # Completely remove Western New York Flash
     team_list = [team for team in team_list if team != "Western New York Flash"]
 
-    
-# Dropdown for team selection
-selected_team = st.selectbox('Select a team', team_list, index=0)
+    # Ensure team list is not empty
+    if not team_list:
+        team_list = ["No Teams Available"]
 
-# Prevent errors when using selected_team in headers
-if selected_team == "No Teams Available":
-    selected_team = "Unknown Team"
-    
     # Dropdown for team selection
-    selected_team = st.selectbox('Select a team', team_list, index=len(team_list) - 1)
-    
-    # Filter the DataFrame based on the selected team and season.
-    # If "Goals" is selected, filter for rows where goal == 1 and own_goal != 1.
-    if viz_type == "Goals":
-        df_filtered = merged_df[
-            (merged_df["goal"] == 1) &
-            (merged_df["own_goal"] != 1) &
-            (merged_df["season_name"] == selected_season) &
-            (merged_df.team_name == selected_team)
-        ]
-    else:  # "All Shots"
-        df_filtered = merged_df[
-            (merged_df["season_name"] == selected_season) &
-            (merged_df.team_name == selected_team)
-        ]
+    selected_team = st.selectbox('Select a team', team_list, index=0)
+
+    # Handle edge case where no valid teams exist
+    if selected_team == "No Teams Available":
+        selected_team = "Unknown Team"
+
+# Filter the DataFrame based on the selected team and season
+if viz_type == "Goals":
+    df_filtered = merged_df[
+        (merged_df["goal"] == 1) &
+        (merged_df["own_goal"] != 1) &
+        (merged_df["season_name"] == selected_season) &
+        (merged_df.team_name == selected_team)
+    ]
+else:  # "All Shots"
+    df_filtered = merged_df[
+        (merged_df["season_name"] == selected_season) &
+        (merged_df.team_name == selected_team)
+    ]
+
 
 # --- Main Page ---
 st.header(f"{selected_team.replace('_', ' ')} {selected_season} {viz_type} Heatmap")
