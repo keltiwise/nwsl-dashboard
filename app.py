@@ -373,7 +373,6 @@ with col[0]:
     
 # Column 1: Heatmap Visualization (Removed extra button)
 with col[1]:
-    st.markdown("### Team Logo")
     
     # The team name as shown on the dashboard
     team_display_name = selected_team  # e.g., "NJ/NY Gotham FC"
