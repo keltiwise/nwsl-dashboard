@@ -231,6 +231,9 @@ with st.sidebar:
     season_list = sorted([s for s in merged_df.season_name.unique() if pd.notna(s)])
     selected_season = st.selectbox('Select a season', season_list, index=len(season_list) - 1)
 
+    # Convert selected_season to an integer for safe comparisons
+    selected_season = int(selected_season)
+
     # Filter teams based on season
     team_list = list(merged_df.team_name.unique())
 
