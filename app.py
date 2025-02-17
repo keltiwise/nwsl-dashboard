@@ -362,7 +362,7 @@ with col[1]:
     
     # Check if the logo file exists and display it
     if os.path.exists(logo_path):
-        st.image(logo_path, use_container_width=True)  # Adjust width as needed
+        st.image(logo_path, width = 400)  # Adjust width as needed
     else:
         st.warning(f"Logo for {team_display_name} not found.")
 
