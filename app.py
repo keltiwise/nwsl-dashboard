@@ -232,7 +232,6 @@ with st.sidebar:
     season_list = sorted([s for s in merged_df.season_name.unique() if pd.notna(s)])
     selected_season = st.selectbox('Select a season', season_list, index=len(season_list) - 1)
 
-try:
     if int(selected_season) < 2018:
         team_list = list(merged_df.team_name.unique())
     else:
@@ -243,13 +242,8 @@ try:
 
     # Completely remove Western New York Flash from selection
     team_list = [team for team in team_list if team != "Western New York Flash"]
-except ValueError:
-    team_list = list(merged_df.team_name.unique())
-    
-    # Ensure team list is never empty
-if not team_list:
-    team_list = ["No Teams Available"]  # Fallback option to prevent errors
 
+    
 # Dropdown for team selection
 selected_team = st.selectbox('Select a team', team_list, index=0)
 
