@@ -322,14 +322,17 @@ with col[0]:
 
 # Column 1: Heatmap Visualization (Removed extra button)
 with col[1]:
-    st.markdown("### Team Logo")
-    # Construct the path to the logo file
-    logo_path = os.path.join("Logos", f"{selected_team}.png")
-    # Check if the logo file exists
-    if os.path.exists(logo_path):
-        st.image(logo_path, width=150)
+    st.markdown("### Team Logo", unsafe_allow_html=True)
+    
+    # Check if file exists before displaying
+    if logo_path.exists():
+        st.markdown(
+            f'<div style="display: flex; justify-content: center;">'
+            f'<img src="{logo_path}" width="150"></div>',
+            unsafe_allow_html=True
+        )
     else:
-        st.warning(f"Logo for {selected_team} not found.")
+        st.warning(f"Logo for {selected_team} not found at {logo_path}")
 
 # Column 2: Additional Insights
 with col[2]:
