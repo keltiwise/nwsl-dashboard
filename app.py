@@ -244,10 +244,10 @@ with st.sidebar:
         "San Diego Wave FC": (2022, 2024),
         "Washington Spirit": (2013, 2024),
         "Western New York Flash": (2013, 2016),
-        "Seattle Reign FC": (2013:2018),
-        "Utah Royals FC": (2018:2020),
-        "Angel City FC": (2022:2024),
-        "FC Kansas City": (2013:2017)
+        "Seattle Reign FC": (2013, 2018),
+        "Utah Royals FC": (2018, 2020),
+        "Angel City FC": (2022, 2024),
+        "FC Kansas City": (2013, 2017)
     }
 
     # Dropdown for season selection (sorted and removing NaN values)
