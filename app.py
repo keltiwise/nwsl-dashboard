@@ -353,7 +353,7 @@ with col[1]:
     st.markdown("### Team Logo")
     
     # Ensure team name formatting for logo file path
-    safe_team_name = selected_team.replace("/", "_")  # Replace ':' with '/'
+    safe_team_name = selected_team.replace(":", "/")  # Replace ':' with '/'
     
     # Construct the path to the logo file
     logo_path = os.path.join("Logos", f"{safe_team_name}.png")
