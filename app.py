@@ -238,14 +238,16 @@ with st.sidebar:
         "Kansas City Current": (2021, 2024),
         "NJ/NY Gotham FC": (2013, 2024),
         "North Carolina Courage": (2017, 2024),
-        "OL Reign": (2013, 2024),
         "Orlando Pride": (2016, 2024),
         "Portland Thorns FC": (2013, 2024),
         "Racing Louisville FC": (2021, 2024),
         "San Diego Wave FC": (2022, 2024),
-        "Utah Royals FC": (2018, 2020),
         "Washington Spirit": (2013, 2024),
         "Western New York Flash": (2013, 2016),
+        "Seattle Reign FC": (2013:2018),
+        "Utah Royals FC": (2018:2020),
+        "Angel City FC": (2022:2024),
+        "FC Kansas City": (2013:2017)
     }
 
     # Dropdown for season selection (sorted and removing NaN values)
