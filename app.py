@@ -350,17 +350,23 @@ with col[0]:
 with col[1]:
     st.markdown("### Team Logo")
     
-    # Ensure team name formatting for logo file path
-    safe_team_name = selected_team.replace(":", "/")  # Replace ':' with '/'
+    # The team name as shown on the dashboard
+    team_display_name = selected_team  # e.g., "NJ/NY Gotham FC"
+    
+    # Replace '/' with ':' to match the file name in the Logos folder
+    file_team_name = selected_team.replace("/", ":")
     
     # Construct the path to the logo file
-    logo_path = os.path.join("Logos", f"{safe_team_name}.png")
+    logo_path = os.path.join("Logos", f"{file_team_name}.png")
     
-    # Check if the logo file exists
+    # Debug: Show the path being used (you can remove this later)
+    st.write(f"Looking for logo at: {logo_path}")
+    
+    # Check if the logo file exists and display it
     if os.path.exists(logo_path):
-        st.image(logo_path, width=200)  # Adjust width for a smaller display
+        st.image(logo_path, width=200)  # Adjust width as needed
     else:
-        st.warning(f"Logo for {selected_team} not found.")
+        st.warning(f"Logo for {team_display_name} not found.")
 
 
 # Column 2: Additional Insights
