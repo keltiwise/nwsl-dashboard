@@ -324,7 +324,7 @@ with col[1]:
     st.markdown("### Team Logo")
     
     # Define possible logo paths
-    logo_path = f"logos/{selected_team}.png"
+    logo_path = f"Logos/{selected_team}.png"
     
     # Debugging: Check if file exists
     if os.path.isfile(logo_path):
