@@ -362,8 +362,38 @@ with col[1]:
 # Column 2: Additional Insights
 with col[2]:
     st.markdown("### Additional Insights")
-    if "shot_distance" in df_filtered.columns:
-        avg_distance = df_filtered["shot_distance"].mean()
-        st.metric(label="Avg. Shot Distance", value=f"{avg_distance:.1f}")
-    else:
+
+    # Average Shot Distance
+    if "distance_from_goal_yds" in df_filtered.columns and not df_filtered.empty:
+        avg_distance = df_filtered["distance_from_goal_yds"].mean()
+        st.metric(label="Avg. Shot Distance (yds)", value=f"{avg_distance:.1f}")
+
+    # Average xG (Expected Goals)
+    if "shot_xg" in df_filtered.columns and not df_filtered.empty:
+        avg_xg = df_filtered["shot_xg"].mean()
+        st.metric(label="Avg. xG per Shot", value=f"{avg_xg:.2f}")
+
+    # Percentage of Shots on Target (Goals + Blocked Shots)
+    if "goal" in df_filtered.columns and "blocked" in df_filtered.columns and not df_filtered.empty:
+        total_shots = len(df_filtered)
+        shots_on_target = df_filtered["goal"].sum() + df_filtered["blocked"].sum()
+        shot_accuracy = (shots_on_target / total_shots) * 100 if total_shots > 0 else 0
+        st.metric(label="Shot Accuracy (%)", value=f"{shot_accuracy:.1f}%")
+
+    # Percentage of Headers
+    if "head" in df_filtered.columns and not df_filtered.empty:
+        header_shots = df_filtered["head"].sum()
+        header_percentage = (header_shots / total_shots) * 100 if total_shots > 0 else 0
+        st.metric(label="Headers (%)", value=f"{header_percentage:.1f}%")
+
+    # Assist Type Distribution
+    if "assist_through_ball" in df_filtered.columns and "assist_cross" in df_filtered.columns and not df_filtered.empty:
+        through_balls = df_filtered["assist_through_ball"].sum()
+        crosses = df_filtered["assist_cross"].sum()
+        assist_type = "Through Balls" if through_balls > crosses else "Crosses"
+        st.metric(label="Most Common Assist Type", value=assist_type)
+
+    # If no relevant metrics available
+    if df_filtered.empty:
         st.write("No additional metrics available.")
+
