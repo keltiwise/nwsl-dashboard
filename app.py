@@ -228,8 +228,10 @@ with st.sidebar:
     viz_type = st.selectbox('Select Visualization Type', ['All Shots', 'Goals'])
 
     # Dropdown for season selection (sorted and removing NaN values)
-    season_list = sorted([s for s in merged_df.season_name.unique() if pd.notna(s)])
+    season_list = sorted([int(s) for s in merged_df.season_name.unique() if pd.notna(s)])  # Convert to int
+    season_list = [str(s) for s in season_list]  # Convert to string for display
     selected_season = st.selectbox('Select a season', season_list, index=len(season_list) - 1)
+
 
     # Convert selected_season to an integer for safe comparisons
     selected_season = int(selected_season)
