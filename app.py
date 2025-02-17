@@ -368,13 +368,14 @@ with col[2]:
         st.markdown(
             f"""
             <div style="
-                background-color: #f0f2f6;  /* Light background */
+                background-color: #ffffff;  /* White background */
                 padding: 10px;
                 border-radius: 10px;
                 text-align: center;
                 font-size: 16px;
                 font-weight: bold;
                 color: #333; /* Dark text */
+                border: 1px solid #ddd; /* Light border */
                 margin-bottom: 10px;">
                 {label}: <span style="font-size: 20px; color: #007bff;">{value}{unit}</span>
             </div>
@@ -415,5 +416,6 @@ with col[2]:
     # If no relevant metrics available
     if df_filtered.empty:
         st.write("No additional metrics available.")
+
 
 
