@@ -277,12 +277,22 @@ with col[0]:
     st.markdown(f"**Team:** {selected_team.replace('_', ' ')}")
     st.markdown(f"**Season:** {selected_season}")
     st.markdown(f"**Type:** {viz_type}")
+    
     total_events = df_filtered.shape[0]
-    if viz_type == "Goals":
-        st.metric(label="Total Goals", value=total_events)
-    else:
-        st.metric(label="Total Shots", value=total_events)
-
+    
+    metric_label = "Total Goals" if viz_type == "Goals" else "Total Shots"
+    
+    # Custom styled metric box
+    st.markdown(
+        f"""
+        <div style="background-color: #f0f2f6; padding: 15px; border-radius: 10px; text-align: center;">
+            <h4 style="color: black; margin: 0;">{metric_label}</h4>
+            <p style="color: black; font-size: 24px; font-weight: bold; margin: 0;">{total_events}</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+    
 # Column 1: Heatmap Visualization (Removed extra button)
 with col[1]:
     st.header(f"{selected_team.replace('_', ' ')} {selected_season} {viz_type} Heatmap")
