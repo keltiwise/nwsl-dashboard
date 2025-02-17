@@ -327,13 +327,12 @@ logo_path = Path(f"Logos/{selected_team}.png")
 with col[1]:
     st.markdown("### Team Logo", unsafe_allow_html=True)
 
-    # Check if the logo file exists
+    # Check if the file exists before displaying
     if logo_path.exists():
-        # Center the image using st.markdown with CSS
         st.markdown(
             f"""
             <div style="display: flex; justify-content: center;">
-                <img src="data:image/png;base64,{logo_path.read_bytes().decode('latin1')}" width="150">
+                <img src="{logo_path}" width="150">
             </div>
             """,
             unsafe_allow_html=True
