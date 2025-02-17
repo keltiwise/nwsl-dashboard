@@ -229,6 +229,25 @@ with st.sidebar:
     # Visualization type selection
     viz_type = st.selectbox('Select Visualization Type', ['All Shots', 'Goals'])
 
+    # Define active years for each team
+    team_years = {
+        "Chicago Red Stars": (2013, 2024),
+        "Bay FC": (2024, 2024),
+        "Boston Breakers": (2013, 2017),
+        "Houston Dash": (2014, 2024),
+        "Kansas City Current": (2021, 2024),
+        "NJ/NY Gotham FC": (2013, 2024),
+        "North Carolina Courage": (2017, 2024),
+        "OL Reign": (2013, 2024),
+        "Orlando Pride": (2016, 2024),
+        "Portland Thorns FC": (2013, 2024),
+        "Racing Louisville FC": (2021, 2024),
+        "San Diego Wave FC": (2022, 2024),
+        "Utah Royals FC": (2018, 2020),
+        "Washington Spirit": (2013, 2024),
+        "Western New York Flash": (2013, 2016),
+    }
+
     # Dropdown for season selection (sorted and removing NaN values)
     season_list = sorted([int(s) for s in merged_df.season_name.unique() if pd.notna(s)])  # Convert to int
     season_list = [str(s) for s in season_list]  # Convert to string for display
@@ -237,19 +256,8 @@ with st.sidebar:
     # Convert selected_season to an integer for safe comparisons
     selected_season = int(selected_season)
 
-    # Filter teams based on season
-    team_list = list(merged_df.team_name.unique())
-
-    # Remove Boston Breakers if the season is 2018 or later
-    if int(selected_season) >= 2018:
-        team_list = [team for team in team_list if team != "Boston Breakers"]
-
-    # Remove Bay FC if the season is before 2024
-    if int(selected_season) < 2024:
-        team_list = [team for team in team_list if team != "Bay FC"]
-
-    # Completely remove Western New York Flash
-    team_list = [team for team in team_list if team != "Western New York Flash"]
+    # Filter teams dynamically based on their active years
+    team_list = [team for team, (start, end) in team_years.items() if start <= selected_season <= end]
 
     # Ensure team list is not empty
     if not team_list:
