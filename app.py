@@ -322,7 +322,12 @@ with col[0]:
 # Column 1: Heatmap Visualization (Removed extra button)
 with col[1]:
     st.header(f"{selected_team.replace('_', ' ')} {selected_season} {viz_type} Heatmap")
-    st.info("Click the button above to display the heatmap.")
+    logo_path = f"logos/{selected_team}.png"  # Ensure filenames match team names
+
+    if os.path.exists(logo_path):
+        st.image(logo_path, use_column_width=True)
+    else:
+        st.markdown("⚠️ No logo available for this team.")
 
 # Column 2: Additional Insights
 with col[2]:
