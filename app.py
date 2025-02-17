@@ -7,6 +7,7 @@ import matplotlib.colors as mcolors
 from matplotlib.patches import Rectangle, Arc
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
 st.set_page_config(
     page_title="NWSL Dashboard",
@@ -322,15 +323,13 @@ with col[0]:
 # Column 1: Heatmap Visualization (Removed extra button)
 with col[1]:
     st.markdown("### Team Logo")
-    
-    # Define possible logo paths
-    logo_path = f"Logos/{selected_team}.png"
-    
-    # Debugging: Check if file exists
-    if os.path.isfile(logo_path):
+    # Construct the path to the logo file
+    logo_path = os.path.join("Logos", f"{selected_team}.png")
+    # Check if the logo file exists
+    if os.path.exists(logo_path):
         st.image(logo_path, use_column_width=True)
     else:
-        st.warning(f"No logo found for {selected_team}")
+        st.warning(f"Logo for {selected_team} not found.")
 
 # Column 2: Additional Insights
 with col[2]:
