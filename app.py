@@ -231,7 +231,7 @@ with st.sidebar:
 
     # Define active years for each team
     team_years = {
-        "Chicago Red Stars": (2013, 2024),
+        "Chicago Stars": (2013, 2024),
         "Bay FC": (2024, 2024),
         "Boston Breakers": (2013, 2017),
         "Houston Dash": (2014, 2024),
