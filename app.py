@@ -232,7 +232,6 @@ with st.sidebar:
     season_list = [str(s) for s in season_list]  # Convert to string for display
     selected_season = st.selectbox('Select a season', season_list, index=len(season_list) - 1)
 
-
     # Convert selected_season to an integer for safe comparisons
     selected_season = int(selected_season)
 
