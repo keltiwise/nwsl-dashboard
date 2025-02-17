@@ -326,16 +326,20 @@ logo_path = Path(f"Logos/{selected_team}.png")
 # Column 1: Heatmap Visualization (Removed extra button)
 with col[1]:
     st.markdown("### Team Logo", unsafe_allow_html=True)
-    
-    # Check if file exists before displaying
+
+    # Check if the logo file exists
     if logo_path.exists():
+        # Center the image using st.markdown with CSS
         st.markdown(
-            f'<div style="display: flex; justify-content: center;">'
-            f'<img src="{logo_path}.png" width="150"></div>',
+            f"""
+            <div style="display: flex; justify-content: center;">
+                <img src="data:image/png;base64,{logo_path.read_bytes().decode('latin1')}" width="150">
+            </div>
+            """,
             unsafe_allow_html=True
         )
     else:
-        st.warning(f"Logo for {selected_team} not found at {logo_path}")
+        st.warning(f"Logo for {selected_team} not found.")
 
 # Column 2: Additional Insights
 with col[2]:
