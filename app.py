@@ -363,37 +363,57 @@ with col[1]:
 with col[2]:
     st.markdown("### Additional Insights")
 
+    # Define a function for styled metric display
+    def styled_metric(label, value, unit=""):
+        st.markdown(
+            f"""
+            <div style="
+                background-color: #f0f2f6;  /* Light background */
+                padding: 10px;
+                border-radius: 10px;
+                text-align: center;
+                font-size: 16px;
+                font-weight: bold;
+                color: #333; /* Dark text */
+                margin-bottom: 10px;">
+                {label}: <span style="font-size: 20px; color: #007bff;">{value}{unit}</span>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
     # Average Shot Distance
     if "distance_from_goal_yds" in df_filtered.columns and not df_filtered.empty:
         avg_distance = df_filtered["distance_from_goal_yds"].mean()
-        st.metric(label="Avg. Shot Distance (yds)", value=f"{avg_distance:.1f}")
+        styled_metric("Avg. Shot Distance", f"{avg_distance:.1f}", " yds")
 
     # Average xG (Expected Goals)
     if "shot_xg" in df_filtered.columns and not df_filtered.empty:
         avg_xg = df_filtered["shot_xg"].mean()
-        st.metric(label="Avg. xG per Shot", value=f"{avg_xg:.2f}")
+        styled_metric("Avg. xG per Shot", f"{avg_xg:.2f}")
 
     # Percentage of Shots on Target (Goals + Blocked Shots)
     if "goal" in df_filtered.columns and "blocked" in df_filtered.columns and not df_filtered.empty:
         total_shots = len(df_filtered)
         shots_on_target = df_filtered["goal"].sum() + df_filtered["blocked"].sum()
         shot_accuracy = (shots_on_target / total_shots) * 100 if total_shots > 0 else 0
-        st.metric(label="Shot Accuracy (%)", value=f"{shot_accuracy:.1f}%")
+        styled_metric("Shot Accuracy", f"{shot_accuracy:.1f}", "%")
 
     # Percentage of Headers
     if "head" in df_filtered.columns and not df_filtered.empty:
         header_shots = df_filtered["head"].sum()
         header_percentage = (header_shots / total_shots) * 100 if total_shots > 0 else 0
-        st.metric(label="Headers (%)", value=f"{header_percentage:.1f}%")
+        styled_metric("Headers", f"{header_percentage:.1f}", "%")
 
     # Assist Type Distribution
     if "assist_through_ball" in df_filtered.columns and "assist_cross" in df_filtered.columns and not df_filtered.empty:
         through_balls = df_filtered["assist_through_ball"].sum()
         crosses = df_filtered["assist_cross"].sum()
         assist_type = "Through Balls" if through_balls > crosses else "Crosses"
-        st.metric(label="Most Common Assist Type", value=assist_type)
+        styled_metric("Most Common Assist Type", assist_type)
 
     # If no relevant metrics available
     if df_filtered.empty:
         st.write("No additional metrics available.")
+
 
