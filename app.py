@@ -351,13 +351,19 @@ logo_path = Path(f"Logos/{selected_team}.png")
 # Column 1: Heatmap Visualization (Removed extra button)
 with col[1]:
     st.markdown("### Team Logo")
+    
+    # Ensure team name formatting for logo file path
+    safe_team_name = selected_team.replace("/", "_")  # Replace '/' with '_'
+    
     # Construct the path to the logo file
-    logo_path = os.path.join("Logos", f"{selected_team}.png")
+    logo_path = os.path.join("Logos", f"{safe_team_name}.png")
+    
     # Check if the logo file exists
     if os.path.exists(logo_path):
-        st.image(logo_path, use_container_width=True)
+        st.image(logo_path, width=150)  # Adjust width for a smaller display
     else:
         st.warning(f"Logo for {selected_team} not found.")
+
 
 # Column 2: Additional Insights
 with col[2]:
