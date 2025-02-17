@@ -246,6 +246,17 @@ try:
 except ValueError:
     team_list = list(merged_df.team_name.unique())
     
+    # Ensure team list is never empty
+if not team_list:
+    team_list = ["No Teams Available"]  # Fallback option to prevent errors
+
+# Dropdown for team selection
+selected_team = st.selectbox('Select a team', team_list, index=0)
+
+# Prevent errors when using selected_team in headers
+if selected_team == "No Teams Available":
+    selected_team = "Unknown Team"
+    
     # Dropdown for team selection
     selected_team = st.selectbox('Select a team', team_list, index=len(team_list) - 1)
     
