@@ -330,7 +330,7 @@ with col[1]:
     logo_path = os.path.join("Logos", f"{selected_team}.png")
     # Check if the logo file exists
     if os.path.exists(logo_path):
-        st.image(logo_path, use_column_width=True)
+        st.image(logo_path, use_container_width=True)
     else:
         st.warning(f"Logo for {selected_team} not found.")
 
