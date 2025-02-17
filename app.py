@@ -286,7 +286,6 @@ with col[0]:
 # Column 1: Heatmap Visualization (Removed extra button)
 with col[1]:
     st.header(f"{selected_team.replace('_', ' ')} {selected_season} {viz_type} Heatmap")
-    st.info("Click the button above to display the heatmap.")
 
 # Column 2: Additional Insights
 with col[2]:
