@@ -1,3 +1,4 @@
+# import libraries
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -10,35 +11,44 @@ import seaborn as sns
 import os
 from pathlib import Path
 
+# set up page configuration for StreamLit
 st.set_page_config(
-    page_title="NWSL Dashboard",
-    layout="wide",
+    page_title="NWSL Dashboard", # page title
+    layout="wide", # wide layout
     initial_sidebar_state="expanded")
 alt.themes.enable("dark")
 
+# adding custom styling with HTML and CSS
 st.markdown("""
 <style>
 [data-testid="block-container"] {
-    padding-left: 2rem;
-    padding-right: 2rem;
-    padding-top: 1rem;
-    padding-bottom: 0rem;
-    margin-bottom: -7rem;
+    padding-left: 2rem; # padding to the left
+    padding-right: 2rem; # padding to the right
+    padding-top: 1rem; # padding to the top
+    padding-bottom: 0rem; # padding to the bottom
+    margin-bottom: -7rem; # adjusting bottom margin to include visualizations
 }
+
+# remove padding from vertical blocks
 [data-testid="stVerticalBlock"] {
-    padding-left: 0rem;
-    padding-right: 0rem;
+    padding-left: 0rem; # remove left padding
+    padding-right: 0rem; # remove right padding
 }
+
+# style background and text alignment
 [data-testid="stMetric"] {
     background-color: #393939;
     text-align: center;
     padding: 15px 0;
 }
+
+# center the label inside the metric component
 [data-testid="stMetricLabel"] {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: flex; # flexbox for layout
+  justify-content: center; # center text alignment
+  align-items: center; # center text alignment
 }
+
 [data-testid="stMetricDeltaIcon-Up"] {
     position: relative;
     left: 38%;
@@ -46,6 +56,8 @@ st.markdown("""
     -ms-transform: translateX(-50%);
     transform: translateX(-50%);
 }
+
+
 [data-testid="stMetricDeltaIcon-Down"] {
     position: relative;
     left: 38%;
@@ -53,65 +65,78 @@ st.markdown("""
     -ms-transform: translateX(-50%);
     transform: translateX(-50%);
 }
-</style>
-""", unsafe_allow_html=True)
 
-# Import all CSV files gathered from API
+</style>
+""", unsafe_allow_html=True) # allow HTML content to be added to page
+
+# import all CSV files gathered from API
 games = pd.read_csv("games_ids_2024.csv")
 shots = pd.read_csv("shots_data_2024.csv")
 teams = pd.read_csv("team_ids_2024.csv")
 
-# Adding team_name to shots column to easily identify which team is shooting which will then 
+# adding team_name to shots column to easily identify which team is shooting which will then 
 # lead to sorting data by name
-# Merge the 'shots' DataFrame with the 'teams' DataFrame based on 'team_id'
+# merge the 'shots' DataFrame with the 'teams' DataFrame based on 'team_id'
 merged_df = pd.merge(shots, teams[['team_id', 'team_name']], on='team_id', how='left')
-# Merge the shots dataframe with the games dataframe on the gameid and keep season name
+
+# merge the shots dataframe with the games dataframe on the gameid and keep season name
 merged_df = pd.merge(merged_df, games[['game_id', 'season_name']], on = 'game_id', how = 'left')
 
-
-# Define the heatmap function for all shots
+# define the heatmap function for all shots
 def make_heatmap(shots_df, team_name, season_name, cmap="turbo", bw_adjust=0.3, levels=10,
                  figsize=(12, 8), dpi=400):
     """
-    Creates a soccer field heatmap using shot location data.
+    creates a soccer field heatmap using shot location data.
     
-    Parameters:
+    parameters:
         shots_df (DataFrame): DataFrame with shot locations.
-                              Must include 'shot_location_x' and 'shot_location_y' columns.
-        team_name (str): The team name (used in the title).
-        season_name (str): The season (used in the title).
-        cmap (str): Color map for the heatmap.
-        bw_adjust (float): Bandwidth adjustment for the KDE plot.
-        levels (int): Number of contour levels.
-        figsize (tuple): Size of the figure.
-        dpi (int): Resolution of the figure.
+                              must include 'shot_location_x' and 'shot_location_y' columns.
+        team_name (str): the team name (used in the title).
+        season_name (str): the season (used in the title).
+        cmap (str): color map for the heatmap.
+        bw_adjust (float): bandwidth adjustment for the KDE plot.
+        levels (int): number of contour levels.
+        figsize (tuple): size of the figure.
+        dpi (int): resolution of the figure.
     
     Returns:
-        fig: The Matplotlib figure with the heatmap.
+        fig: the Matplotlib figure with the heatmap.
     """
+
+    # clear current figure for new image
     plt.clf()
+    # create a new figure and subplots with size and resolution
     fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
+    # set the background color to white
     fig.patch.set_facecolor('white')
+    # set the background color of plot area to white
     ax.set_facecolor('white')
+    # equal scaling on both axes
     ax.set_aspect('equal')
     
-    # Remove axes details
+    # remove axes details
+    # hide all borders of axes
     for spine in ax.spines.values():
         spine.set_visible(False)
+    # remove tick marks from top and bottom
     ax.tick_params(bottom=False, left=False)
+    # remove x and y ticks
     ax.set_xticks([])
     ax.set_yticks([])
     
-    # Set field limits and invert the y-axis for a field-like layout
+    # set field limits and invert the y-axis for a field-like layout
+    # horizonal line
     plt.xlim([10, 90])
+    # vertical line
     plt.ylim([60, 105])
+    # invert the y axis to align with plot
     ax.invert_yaxis()
     
-    # Draw the field background (touchline)
+    # draw the field background (touchline)
     ax.add_patch(Rectangle((0, 0), 100, 100, ec=mcolors.CSS4_COLORS['black'], 
                            fc=mcolors.CSS4_COLORS['white'], lw=5))
     
-    # Plot the heatmap of shots using a kernel density estimate
+    # plot the heatmap of shots using a kernel density estimate
     sns.kdeplot(
         x=shots_df["shot_location_y"],
         y=shots_df["shot_location_x"],
