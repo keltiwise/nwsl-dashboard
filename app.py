@@ -358,9 +358,7 @@ with col[1]:
     
     # Construct the path to the logo file
     logo_path = os.path.join("Logos", f"{file_team_name}.png")
-    
-    # Debug: Show the path being used (you can remove this later)
-    st.write(f"Looking for logo at: {logo_path}")
+
     
     # Check if the logo file exists and display it
     if os.path.exists(logo_path):
