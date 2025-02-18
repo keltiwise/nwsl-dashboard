@@ -415,41 +415,58 @@ with col[2]:
             unsafe_allow_html=True
         )
 
-    # Average Shot Distance
-    if "distance_from_goal_yds" in df_filtered.columns and not df_filtered.empty:
-        avg_distance = df_filtered["distance_from_goal_yds"].mean()
-        styled_metric("Avg. Shot Distance", f"{avg_distance:.1f}", " yds")
-
-    # Most Common Shot Distance
-    if "distance_from_goal_yds" in df_filtered.columns and not df_filtered.empty:
-        common_shot_distance = df_filtered["distance_from_goal_yds"].mode().iloc[0]
-        styled_metric("Most Common Shot Yard", f"{common_shot_distance:.1f}", " yds")
-
-    # Average xG (Expected Goals)
-    if "shot_xg" in df_filtered.columns and not df_filtered.empty:
-        avg_xg = df_filtered["shot_xg"].mean()
-        styled_metric("Avg. xG per Shot", f"{avg_xg:.2f}")
-
-    # Percentage of Shots on Target (Goals + Blocked Shots)
-    if "goal" in df_filtered.columns and "blocked" in df_filtered.columns and not df_filtered.empty:
+    if not df_filtered.empty:
         total_shots = len(df_filtered)
-        shots_on_target = df_filtered["goal"].sum() + df_filtered["blocked"].sum()
-        shot_accuracy = (shots_on_target / total_shots) * 100 if total_shots > 0 else 0
-        styled_metric("Shot Accuracy", f"{shot_accuracy:.1f}", "%")
 
-    # Percentage of Headers
-    if "head" in df_filtered.columns and not df_filtered.empty:
-        header_shots = df_filtered["head"].sum()
-        header_percentage = (header_shots / total_shots) * 100 if total_shots > 0 else 0
-        styled_metric("Headers", f"{header_percentage:.1f}", "%")
+        # Average Shot Distance
+        if "distance_from_goal_yds" in df_filtered.columns:
+            avg_distance = df_filtered["distance_from_goal_yds"].mean()
+            styled_metric("Avg. Shot Distance", f"{avg_distance:.1f}", " yds")
 
-    # Assist Type Distribution
-    if "assist_through_ball" in df_filtered.columns and "assist_cross" in df_filtered.columns and not df_filtered.empty:
-        through_balls = df_filtered["assist_through_ball"].sum()
-        crosses = df_filtered["assist_cross"].sum()
-        assist_type = "Through Balls" if through_balls > crosses else "Crosses"
-        styled_metric("Most Common Assist Type", assist_type)
+        # Most Common Shot Yard
+        if "distance_from_goal_yds" in df_filtered.columns:
+            common_shot_distance = df_filtered["distance_from_goal_yds"].mode().iloc[0]
+            styled_metric("Most Common Shot Yard", f"{common_shot_distance:.1f}", " yds")
 
-    # If no relevant metrics available
-    if df_filtered.empty:
+        # Average xG (Expected Goals)
+        if "shot_xg" in df_filtered.columns:
+            avg_xg = df_filtered["shot_xg"].mean()
+            styled_metric("Avg. xG per Shot (Expected Goals)", f"{avg_xg:.2f}")
+
+        # Goal Percentage
+        if "goal" in df_filtered.columns:
+            total_goals = df_filtered["goal"].sum()
+            goal_percentage = (total_goals / total_shots) * 100 if total_shots > 0 else 0
+            styled_metric("Goal Percentage", f"{goal_percentage:.1f}", "%")
+
+        # Percentage of Headers
+        if "head" in df_filtered.columns:
+            header_shots = df_filtered["head"].sum()
+            header_percentage = (header_shots / total_shots) * 100 if total_shots > 0 else 0
+            styled_metric("Headers", f"{header_percentage:.1f}", "%")
+
+        # Shot Accuracy (Shots on Target)
+        if "goal" in df_filtered.columns and "blocked" in df_filtered.columns:
+            shots_on_target = df_filtered["goal"].sum() + df_filtered["blocked"].sum()
+            shot_accuracy = (shots_on_target / total_shots) * 100 if total_shots > 0 else 0
+            styled_metric("Shot Accuracy", f"{shot_accuracy:.1f}", "%")
+
+        # Most Common Assist Type
+        if "assist_through_ball" in df_filtered.columns and "assist_cross" in df_filtered.columns:
+            through_balls = df_filtered["assist_through_ball"].sum()
+            crosses = df_filtered["assist_cross"].sum()
+            assist_type = "Through Balls" if through_balls > crosses else "Crosses"
+            styled_metric("Most Common Assist Type", assist_type)
+
+        # Average Game Minute for Shots
+        if "game_minute" in df_filtered.columns:
+            avg_game_minute = df_filtered["game_minute"].mean()
+            styled_metric("Avg. Game Minute for Shots", f"{avg_game_minute:.1f}", " min")
+
+        # Period Distribution
+        if "period_id" in df_filtered.columns:
+            most_common_period = df_filtered["period_id"].mode().iloc[0]
+            styled_metric("Most Common Period", f"Period {most_common_period}")
+
+    else:
         st.write("No additional metrics available.")
