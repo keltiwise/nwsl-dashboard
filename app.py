@@ -420,6 +420,11 @@ with col[2]:
         avg_distance = df_filtered["distance_from_goal_yds"].mean()
         styled_metric("Avg. Shot Distance", f"{avg_distance:.1f}", " yds")
 
+    # Most Common Shot Distance
+    if "distance_from_goal_yds" in df_filtered.columns and not df_filtered.empty:
+        common_shot_distance = df_filtered["distance_from_goal_yds"].mode().iloc[0]
+        styled_metric("Most Common Shot Yard", f"{common_shot_distance:.1f}", " yds")
+
     # Average xG (Expected Goals)
     if "shot_xg" in df_filtered.columns and not df_filtered.empty:
         avg_xg = df_filtered["shot_xg"].mean()
@@ -448,6 +453,3 @@ with col[2]:
     # If no relevant metrics available
     if df_filtered.empty:
         st.write("No additional metrics available.")
-
-
-
