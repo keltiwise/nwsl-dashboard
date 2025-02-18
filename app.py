@@ -466,7 +466,7 @@ with col[2]:
         # Period Distribution
         if "period_id" in df_filtered.columns:
             most_common_period = df_filtered["period_id"].mode().iloc[0]
-            styled_metric("Most Common Period", f"Period {most_common_period}")
+            styled_metric("Most Common Half", f"Half {most_common_period}")
 
     else:
         st.write("No additional metrics available.")
