@@ -83,7 +83,7 @@ merged_df = pd.merge(shots, teams[['team_id', 'team_name']], on='team_id', how='
 merged_df = pd.merge(merged_df, games[['game_id', 'season_name']], on = 'game_id', how = 'left')
 
 # define the heatmap function for all shots
-def make_heatmap(shots_df, team_name, season_name, cmap="turbo", bw_adjust=0.3, levels=10,
+def make_heatmap(shots_df, team_name, season_name, half = "first", cmap="turbo", bw_adjust=0.3, levels=10,
                  figsize=(12, 8), dpi=400):
     """
     creates a soccer field heatmap using shot location data.
@@ -102,6 +102,14 @@ def make_heatmap(shots_df, team_name, season_name, cmap="turbo", bw_adjust=0.3, 
     Returns:
         fig: the Matplotlib figure with the heatmap.
     """
+
+    # Filter shots by half
+    if half == "first":
+        shots_df = shots_df[shots_df["period_id"] == 1]
+    elif half == "second":
+        shots_df = shots_df[shots_df["period_id"] == 2]
+    else:
+        raise ValueError("Half must be either 'first' or 'second'.")
 
     # clear current figure for new image
     plt.clf()
@@ -166,13 +174,13 @@ def make_heatmap(shots_df, team_name, season_name, cmap="turbo", bw_adjust=0.3, 
                       ec=mcolors.CSS4_COLORS['black'], lw=4))
     
     # Add title and subtitle
-    plt.title(f"{team_name.replace('_', ' ')} {season_name} Shot Heatmap", fontsize=16, weight='bold', pad=20)
-    plt.text(50, 60, "Visualizing All Shots", fontsize=12, color='gray', ha='center')
+    plt.title(f"{team_name.replace('_', ' ')} {season_name} {half.capitalize()} Half Shot Heatmap", fontsize=16, weight='bold', pad=20)
+    plt.text(50, 60, f"Visualizing {half.capitalize()} Half Shots", fontsize=12, color='gray', ha='center')
     
     return fig
 
 # Define the heatmap function for goals only
-def make_goals_heatmap(goals_df, team_name, season_name, cmap="turbo", bw_adjust=0.3, levels=10,
+def make_goals_heatmap(goals_df, team_name, season_name, half = "first", cmap="turbo", bw_adjust=0.3, levels=10,
                        figsize=(12, 8), dpi=400):
     """
     Creates a soccer field heatmap using goal shot location data.
@@ -191,6 +199,15 @@ def make_goals_heatmap(goals_df, team_name, season_name, cmap="turbo", bw_adjust
     Returns:
         fig: The Matplotlib figure with the heatmap.
     """
+
+    # Filter goals by half
+    if half == "first":
+        goals_df = goals_df[goals_df["period_id"] == 1]
+    elif half == "second":
+        goals_df = goals_df[goals_df["period_id"] == 2]
+    else:
+        raise ValueError("Half must be either 'first' or 'second'.")
+    
     plt.clf()
     fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
     fig.patch.set_facecolor('white')
@@ -243,8 +260,9 @@ def make_goals_heatmap(goals_df, team_name, season_name, cmap="turbo", bw_adjust
                       ec=mcolors.CSS4_COLORS['black'], lw=4))
     
     # Add title and subtitle
-    plt.title(f"{team_name.replace('_', ' ')} {season_name} Goal Heatmap", fontsize=16, weight='bold', pad=20)
-    plt.text(50, 60, "Visualizing All Goals", fontsize=12, color='gray', ha='center')
+    plt.title(f"{team_name.replace('_', ' ')} {season_name} {half.capitalize()} Half Goal Heatmap", fontsize=16, weight='bold', pad=20)
+    plt.text(50, 60, f"Visualizing {half.capitalize()} Half Goals", fontsize=12, color='gray', ha='center')
+
     
     return fig
 # --- Streamlit Sidebar ---
@@ -323,18 +341,27 @@ else:  # "All Shots"
         (merged_df["team_name"] == selected_team)
     ]
 
+# Further filter by half
+if half == "First Half":
+    df_filtered = df_filtered[df_filtered["period_id"] == 1]  # 1 = First Half
+elif half == "Second Half":
+    df_filtered = df_filtered[df_filtered["period_id"] == 2]  # 2 = Second Half
+
+
 # Keep only the necessary columns if they exist in the dataset
 df_filtered = df_filtered[[col for col in columns_to_keep if col in df_filtered.columns]]
 
 
 # --- Main Page ---
-st.header(f"{selected_team.replace('_', ' ')} {selected_season} {viz_type} Heatmap")
+st.header(f"{selected_team.replace('_', ' ')} {selected_season} {viz_type} Heatmap ({half})")
 
 # Automatically show heatmap without a button
 if viz_type == "Goals":
-    fig = make_goals_heatmap(df_filtered, selected_team, selected_season)
+    fig = make_goals_heatmap(df_filtered, selected_team, selected_season, half=half.lower())
 else:
-    fig = make_heatmap(df_filtered, selected_team, selected_season)
+    fig = make_heatmap(df_filtered, selected_team, selected_season, half=half.lower())
+
+# Display the heatmap
 st.pyplot(fig)
 
 col = st.columns((1.5, 4.5, 2), gap='medium')
