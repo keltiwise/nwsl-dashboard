@@ -354,7 +354,7 @@ df_filtered = df_filtered[[col for col in columns_to_keep if col in df_filtered.
 
 
 # --- Main Page ---
-st.header(f"{selected_team.replace('_', ' ')} {selected_season} {viz_type} Heatmap ({half})")
+st.header(f"{selected_team.replace('_', ' ')} {selected_season} {viz_type} Heatmap")
 
 # Automatically show heatmap without a button
 # Automatically show heatmap without a button
