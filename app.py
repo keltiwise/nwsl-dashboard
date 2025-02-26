@@ -315,6 +315,12 @@ with st.sidebar:
     if selected_team == "No Teams Available":
         selected_team = "Unknown Team"
 
+    # Dropdown for selecting first or second half
+    half = st.selectbox("Select Half", ["First Half", "Second Half"], index=0)
+
+# Convert the half to 'first' or 'second' for use in the heatmap function
+half = 'first' if half == "First Half" else 'second'
+
 # Define the relevant columns to keep
 columns_to_keep = [
     "goal", "own_goal", "blocked", "distance_from_goal_yds",  # Shot results
@@ -341,11 +347,6 @@ else:  # "All Shots"
         (merged_df["team_name"] == selected_team)
     ]
 
-# Further filter by half
-if half == "First Half":
-    df_filtered = df_filtered[df_filtered["period_id"] == 1]  # 1 = First Half
-elif half == "Second Half":
-    df_filtered = df_filtered[df_filtered["period_id"] == 2]  # 2 = Second Half
 
 
 # Keep only the necessary columns if they exist in the dataset
@@ -356,10 +357,12 @@ df_filtered = df_filtered[[col for col in columns_to_keep if col in df_filtered.
 st.header(f"{selected_team.replace('_', ' ')} {selected_season} {viz_type} Heatmap ({half})")
 
 # Automatically show heatmap without a button
+# Automatically show heatmap without a button
 if viz_type == "Goals":
-    fig = make_goals_heatmap(df_filtered, selected_team, selected_season, half=half.lower())
+    fig = make_goals_heatmap(df_filtered, selected_team, selected_season, half=half)
 else:
-    fig = make_heatmap(df_filtered, selected_team, selected_season, half=half.lower())
+    fig = make_heatmap(df_filtered, selected_team, selected_season, half=half)
+
 
 # Display the heatmap
 st.pyplot(fig)
