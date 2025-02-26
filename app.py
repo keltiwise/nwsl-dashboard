@@ -416,7 +416,13 @@ with col[1]:
     
     # Check if the logo file exists; if it does, display the image
     if os.path.exists(logo_path):
-        st.image(logo_path, width=400)  # Adjust the image width as necessary
+        # Center the logo using custom HTML
+        st.markdown(
+            f"""
+            <div style="display: flex; justify-content: center;">
+                <img src="{logo_path}" width="400">
+            </div>
+            """, unsafe_allow_html=True)
     else:
         # If the logo is not found, display a warning message
         st.warning(f"Logo for {team_display_name} not found.")
